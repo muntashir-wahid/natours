@@ -5,6 +5,10 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
 
 // Read files from loacl folders
 const tours = JSON.parse(
@@ -17,6 +21,7 @@ const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     result: tours.length,
+    requestedAt: req.requestTime,
     data: {
       tours,
     },
@@ -81,7 +86,6 @@ const updateTour = (req, res) => {
 
 const deleteTour = (req, res) => {
   const id = req.params.id * 1;
-  console.log('api hit');
 
   if (id > tours.length) {
     return res.status(404).json({
