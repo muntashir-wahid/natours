@@ -10,6 +10,8 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`, 'utf-8')
 );
 
+// Serve all tours
+
 app.get('/api/v1/tours', (req, res) => {
   res.status(200).json({
     status: 'success',
@@ -19,6 +21,8 @@ app.get('/api/v1/tours', (req, res) => {
     },
   });
 });
+
+// Serve a single tour
 
 app.get('/api/v1/tours/:id', (req, res) => {
   const id = req.params.id * 1;
@@ -40,6 +44,8 @@ app.get('/api/v1/tours/:id', (req, res) => {
   });
 });
 
+// Handle post request and create a new tour
+
 app.post('/api/v1/tours', (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
 
@@ -60,6 +66,25 @@ app.post('/api/v1/tours', (req, res) => {
   );
 });
 
+// Update a perticular resourse
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  const id = req.params.id * 1;
+
+  if (id > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: '<Updated tour here...>',
+  });
+});
+
+// Listening to requests
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
