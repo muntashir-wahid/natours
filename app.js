@@ -84,6 +84,25 @@ app.patch('/api/v1/tours/:id', (req, res) => {
   });
 });
 
+// Delete a perticular resourse
+
+app.delete('/api/v1/tours/:id', (req, res) => {
+  const id = req.params.id * 1;
+  console.log('api hit');
+
+  if (id > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+
+  res.status(204).json({
+    status: 'success',
+    // data: null,
+  });
+});
+
 // Listening to requests
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
