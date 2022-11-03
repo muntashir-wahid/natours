@@ -36,6 +36,17 @@ exports.getTour = (req, res) => {
   });
 };
 
+exports.checkBody = (req, res, next) => {
+  const body = req.body;
+  if (!body.name || !body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'missing name or price',
+    });
+  }
+  next();
+};
+
 exports.createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
 
