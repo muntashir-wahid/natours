@@ -66,23 +66,35 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+// Adding a virtual property
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+// Pre save hook to add a slug
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true, replacement: '-' });
   next();
 });
 
+// Pre find hook to exclude all secret tours
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   this.start = Date.now();
   next();
 });
 
+// Post save hook to measure query time
 tourSchema.post(/^find/, function (docs, next) {
   console.log(`This query took ${Date.now() - this.start}ms`);
+  next();
+});
+
+// Aggregation Middleware
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({
+    $match: { secretTour: { $ne: true } },
+  });
   next();
 });
 
