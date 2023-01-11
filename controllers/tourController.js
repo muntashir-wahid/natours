@@ -49,7 +49,7 @@ exports.getTour = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: 'fail',
-      message: 'Invalid Id',
+      message: error,
     });
   }
 };

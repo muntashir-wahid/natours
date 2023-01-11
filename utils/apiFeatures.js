@@ -16,7 +16,6 @@ class APIFeatures {
       /\b(gte|gt|lte|lt)\b/g,
       (replace) => `$${replace}`
     );
-    console.log('Filter function runs');
 
     this.query = this.query.find(JSON.parse(queryStr));
     return this;
